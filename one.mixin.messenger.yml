@@ -1,7 +1,7 @@
 id: one.mixin.messenger
-runtime: org.gnome.Platform
-runtime-version: '42'
-sdk: org.gnome.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
 command: mixin_desktop
 finish-args:
   - --share=ipc
@@ -13,6 +13,14 @@ finish-args:
   - --filesystem=home
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
+
+cleanup-commands:
+  - mkdir -p ${FLATPAK_DEST}/lib/webview
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/gir-1.0
 
 modules:
   - name: mixin_desktop
@@ -37,3 +45,25 @@ modules:
         sha256: 4c9c3b7fac8452bcb447288df694cda908ac7f3b6c1a4b9e3b9795e85d6d7ea7
       - type: file
         path: one.mixin.messenger.metainfo.xml
+  
+  - name: webkitgtk
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=None
+      - -DPORT=GTK
+      - -DUSE_LIBSECRET=OFF
+      - -DUSE_WOFF2=OFF
+      - -DUSE_WPE_RENDERER=OFF
+      - -DENABLE_BUBBLEWRAP_SANDBOX=OFF
+      - -DENABLE_GAMEPAD=OFF
+      - -DENABLE_INTROSPECTION=OFF
+      - -DENABLE_SPELLCHECK=OFF
+    sources:
+      - type: archive
+        url: https://webkitgtk.org/releases/webkitgtk-2.38.3.tar.xz
+        sha256: 41f001d1ed448c6936b394a9f20e4640eebf83a7f08262df28504f7410604a5a
+        x-checker-data:
+          type: html
+          url: https://webkitgtk.org/releases/
+          version-pattern: LATEST-STABLE-(\d[\.\d]+\d)
+          url-template: https://webkitgtk.org/releases/webkitgtk-$version.tar.xz
