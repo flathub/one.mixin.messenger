@@ -1,6 +1,6 @@
 id: one.mixin.messenger
 runtime: org.gnome.Platform
-runtime-version: '42'
+runtime-version: '43'
 sdk: org.gnome.Sdk
 command: mixin_desktop
 finish-args:
@@ -33,7 +33,7 @@ modules:
         path: mixin_desktop.png
       - type: archive
         archive-type: tar
-        url: https://github.com/MixinNetwork/flutter-app/releases/download/v0.38.0/mixin_desktop_linux_amd64_portable.tar.gz
-        sha256: a4c1e4766267fe845332442b73f0253f59f11df2d4886b0bbc81eee1a5768406
+        url: https://github.com/MixinNetwork/flutter-app/releases/download/v0.38.5-1/mixin_desktop_linux_amd64_portable.tar.gz
+        sha256: 3eecd3ea05500ab53dc758f7456d8eac5bede13127c40f82bb73378f32d69c2f
       - type: file
         path: one.mixin.messenger.metainfo.xml
