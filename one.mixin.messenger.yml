@@ -33,7 +33,7 @@ modules:
         path: mixin_desktop.png
       - type: archive
         archive-type: tar
-        url: https://github.com/MixinNetwork/flutter-app/releases/download/v0.39.1/mixin_desktop_linux_amd64_portable.tar.gz
-        sha256: 260d3e1085e7ccc8896567efc51a556142b4e7405d4b447f957bb96f465309f0
+        url: https://github.com/MixinNetwork/flutter-app/releases/download/v0.39.2/mixin_desktop_linux_amd64_portable.tar.gz
+        sha256: 4efa3efa46e20a82ede6b2f13824b509e8e87a549ec95aa26e168669567eee61
       - type: file
         path: one.mixin.messenger.metainfo.xml
