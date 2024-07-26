@@ -1,0 +1,27 @@
+name: Update from Upstream
+
+on:
+  schedule:
+    - '0 0 * * *'
+  workflow_dispatch:
+  watch:
+    types: [ started ]
+
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - id: upstream
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: MixinNetwork/flutter-app
+
+      - name: check has upgrade
+        run: |
+          current_version=$(cat one.mixin.messenger.yml | grep -oP "(?<=https://github.com/MixinNetwork/flutter-app/releases/download/).*(?=/mixin_desktop_linux_amd64_portable.tar.gz)")
+          echo "current version: $current_version}, remote version: ${steps.upstream.outputs.release}"
