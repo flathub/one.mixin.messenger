@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+  push:
 
 jobs:
   update:
@@ -30,4 +31,4 @@ jobs:
       - name: check has upgrade
         run: |
           current_version=$(cat one.mixin.messenger.yml | grep -oP "(?<=https://github.com/MixinNetwork/flutter-app/releases/download/).*(?=/mixin_desktop_linux_amd64_portable.tar.gz)")
-          echo "current version: $current_version, remote version: ${{ steps.upstream.outputs.release }}"
+          echo "current version: $current_version, remote version: ${{ steps.fetch_release.outputs.result }}"
