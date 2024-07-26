@@ -13,12 +13,57 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - id: upstream
-        uses: pozetroninc/github-action-get-latest-release@master
+      - uses: actions/setup-node@v4
         with:
-          repository: MixinNetwork/flutter-app
+          node-version: 20
+
+      - name: fetch latest release tag from upstream repo
+        id: fetch_release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = 'MixinNetwork';
+            const repo = 'flutter-app';
+            const { data: latestRelease } = await github.rest.repos.getLatestRelease({owner, repo});
+            core.setOutput('tag_name', latestRelease.tag_name);
 
       - name: check has upgrade
+        id: check_upgrade
         run: |
-          current_version=$(cat one.mixin.messenger.yml | grep -oP "(?<=https://github.com/MixinNetwork/flutter-app/releases/download/).*(?=/mixin_desktop_linux_amd64_portable.tar.gz)")
-          echo "current version: $current_version}, remote version: ${steps.upstream.outputs.release}"
+          current_version=$(grep -oP "(?<=https://github.com/MixinNetwork/flutter-app/releases/download/).*(?=/mixin_desktop_linux_amd64_portable.tar.gz)" one.mixin.messenger.yml)
+          echo "current version: $current_version, remote version: ${{ steps.fetch_release.outputs.tag_name }}"
+          if [ "$current_version" != "${{ steps.fetch_release.outputs.tag_name }}" ]; then
+            echo "new version available"
+            echo "new_version=${{ steps.fetch_release.outputs.tag_name }}" >> $GITHUB_ENV
+            echo "current_version=$current_version" >> $GITHUB_ENV
+      
+            wget https://github.com/MixinNetwork/flutter-app/releases/download/${{ steps.fetch_release.outputs.tag_name }}/mixin_desktop_linux_amd64_portable.tar.gz -O mixin_desktop_linux_amd64_portable.tar.gz
+            new_version_sha256=$(sha256sum mixin_desktop_linux_amd64_portable.tar.gz | cut -d' ' -f1)
+            echo "new_version_sha256=$new_version_sha256" >> $GITHUB_ENV
+          else
+            echo "no new version available"
+            exit 0
+          fi
+
+      - name: Update version
+        if: env.new_version
+        run: |
+          sed -i -e 's/${{ env.current_version }}/${{ env.new_version }}/g' one.mixin.messenger.yml
+          sed -i -e 's/sha256:.*/sha256: ${{ env.new_version_sha256 }}/g' one.mixin.messenger.yml
+          CURRENT_DATE=$(date '+%Y-%-m-%-d')
+          VERSION=$(echo ${{ env.new_version }} | cut -d 'v' -f2)
+          sed -i "/<releases>/a\        <release version=\"${VERSION}\" date=\"$CURRENT_DATE\" />" one.mixin.messenger.metainfo.xml
+
+      - name: Create Pull Request
+        if: env.new_version
+        uses: peter-evans/create-pull-request@v6
+        with:
+          add-paths: |
+            one.mixin.messenger.yml
+            one.mixin.messenger.metainfo.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          commit-message: Update to version ${{ env.new_version }}
+          branch: update-version-${{ env.new_version }}
+          title: Update to version ${{ env.new_version }}
+          body: This PR updates the version to https://github.com/MixinNetwork/flutter-app/releases/tag/${{ env.new_version }}.
