@@ -13,12 +13,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - id: upstream
-        uses: pozetroninc/github-action-get-latest-release@master
+      - uses: actions/setup-node@v4
         with:
-          repository: MixinNetwork/flutter-app
+          node-version: 20
+
+      - name: fetch latest release tag from upstream repo
+        id: fetch_release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = 'MixinNetwork'
+            const repo = 'flutter-app'
+            const { data: latestRelease } = await github.repos.getLatestRelease({owner, repo}}
+            return latestRelease.tag_name;
 
       - name: check has upgrade
         run: |
           current_version=$(cat one.mixin.messenger.yml | grep -oP "(?<=https://github.com/MixinNetwork/flutter-app/releases/download/).*(?=/mixin_desktop_linux_amd64_portable.tar.gz)")
-          echo "current version: $current_version}, remote version: ${steps.upstream.outputs.release}"
+          echo "current version: $current_version, remote version: ${{ steps.upstream.outputs.release }}"
