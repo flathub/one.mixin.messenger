@@ -51,7 +51,6 @@ jobs:
           sed -i -e 's/${{ env.current_version }}/${{ env.new_version }}/g' one.mixin.messenger.yml
           sed -i -e 's/sha256:.*/sha256: ${{ env.new_version_sha256 }}/g' one.mixin.messenger.yml
           CURRENT_DATE=$(date '+%Y-%-m-%-d')
-          sed -i '/<releases>/a\        <release version="${{ env.new_version }}" date="xxxx-x-xx" />' one.mixin.messenger.metainfo.xml
           sed -i "/<releases>/a\        <release version=\"${{ env.new_version }}\" date=\"$CURRENT_DATE\" />" one.mixin.messenger.metainfo.xml
 
       - name: Commit changes
