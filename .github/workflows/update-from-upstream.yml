@@ -53,7 +53,7 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git add one.mixin.messenger.yml
           git commit -m "Update to version ${{ steps.fetch_release.outputs.tag_name }}"
-          git push --set-upstream origin update-version-${{ steps.fetch_release.outputs.tag_name }}
+          git push origin HEAD:update-version-${{ steps.fetch_release.outputs.tag_name }}
 
       - name: Create Pull Request
         if: env.new_version
