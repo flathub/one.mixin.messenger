@@ -39,6 +39,7 @@ jobs:
           else
             echo "no new version available"
             exit 0
+          fi
 
       - name: Update version
         if: env.new_version
