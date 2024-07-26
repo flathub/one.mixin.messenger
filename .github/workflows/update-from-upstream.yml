@@ -38,7 +38,7 @@ jobs:
             echo "new_version=${{ steps.fetch_release.outputs.tag_name }}" >> $GITHUB_ENV
             echo "current_version=$current_version" >> $GITHUB_ENV
       
-            wget https://github.com/MixinNetwork/flutter-app/releases/download/v1.9.0/mixin_desktop_linux_amd64_portable.tar.gz -O mixin_desktop_linux_amd64_portable.tar.gz
+            wget https://github.com/MixinNetwork/flutter-app/releases/download/${{ steps.fetch_release.outputs.tag_name }}/mixin_desktop_linux_amd64_portable.tar.gz -O mixin_desktop_linux_amd64_portable.tar.gz
             new_version_sha256=$(sha256sum mixin_desktop_linux_amd64_portable.tar.gz | cut -d' ' -f1)
             echo "new_version_sha256=$new_version_sha256" >> $GITHUB_ENV
           else
@@ -51,7 +51,9 @@ jobs:
         run: |
           sed -i -e 's/${{ env.current_version }}/${{ env.new_version }}/g' one.mixin.messenger.yml
           sed -i -e 's/sha256:.*/sha256: ${{ env.new_version_sha256 }}/g' one.mixin.messenger.yml
-          
+          CURRENT_DATE=$(date '+%Y-%-m-%-d')
+          sed -i '/<releases>/a\        <release version="${{ env.new_version }}" date="xxxx-x-xx" />' one.mixin.messenger.metainfo.xml
+          sed -i "/<releases>/a\        <release version=\"${{ env.new_version }}\" date=\"$CURRENT_DATE\" />" one.mixin.messenger.metainfo.xml
 
       - name: Commit changes
         if: env.new_version
@@ -60,14 +62,14 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git add one.mixin.messenger.yml
           git commit -m "Update to version ${{ steps.fetch_release.outputs.tag_name }}"
-          git push origin HEAD:update-version-${{ steps.fetch_release.outputs.tag_name }}
+          git push origin HEAD:update-version-${{ steps.fetch_release.outputs.tag_name }} -f
 
-#      - name: Create Pull Request
-#        if: env.new_version
-#        uses: peter-evans/create-pull-request@v5
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          commit-message: Update to version ${{ steps.fetch_release.outputs.tag_name }}
-#          branch: update-version-${{ steps.fetch_release.outputs.tag_name }}
-#          title: Update to version ${{ steps.fetch_release.outputs.tag_name }}
-#          body: This PR updates the version to ${{ steps.fetch_release.outputs.tag_name }}.
+      - name: Create Pull Request
+        if: env.new_version
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update to version ${{ steps.fetch_release.outputs.tag_name }}
+          branch: update-version-${{ steps.fetch_release.outputs.tag_name }}
+          title: Update to version ${{ steps.fetch_release.outputs.tag_name }}
+          body: This PR updates the version to ${{ steps.fetch_release.outputs.tag_name }}.
