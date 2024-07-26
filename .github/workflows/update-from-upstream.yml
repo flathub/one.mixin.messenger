@@ -36,6 +36,7 @@ jobs:
           if [ "$current_version" != "${{ steps.fetch_release.outputs.tag_name }}" ]; then
             echo "new version available"
             echo "new_version=${{ steps.fetch_release.outputs.tag_name }}" >> $GITHUB_ENV
+            echo "current_version=$current_version" >> $GITHUB_ENV
           else
             echo "no new version available"
             exit 0
@@ -44,7 +45,7 @@ jobs:
       - name: Update version
         if: env.new_version
         run: |
-          sed -i "s|https://github.com/MixinNetwork/flutter-app/releases/download/.*/mixin_desktop_linux_amd64_portable.tar.gz|https://github.com/MixinNetwork/flutter-app/releases/download/${{ steps.fetch_release.outputs.tag_name }}/mixin_desktop_linux_amd64_portable.tar.gz|" one.mixin.messenger.yml
+          sed -i -e 's/${{ env.current_version }}/${{ env.new_version }}/g' one.mixin.messenger.yml
 
       - name: Commit changes
         if: env.new_version
