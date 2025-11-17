@@ -37,9 +37,15 @@ jobs:
             echo "new_version=${{ steps.fetch_release.outputs.tag_name }}" >> $GITHUB_ENV
             echo "current_version=$current_version" >> $GITHUB_ENV
       
+            # Download and calculate SHA256 for AMD64
             wget https://github.com/MixinNetwork/flutter-app/releases/download/${{ steps.fetch_release.outputs.tag_name }}/mixin_desktop_linux_amd64_portable.tar.gz -O mixin_desktop_linux_amd64_portable.tar.gz
-            new_version_sha256=$(sha256sum mixin_desktop_linux_amd64_portable.tar.gz | cut -d' ' -f1)
-            echo "new_version_sha256=$new_version_sha256" >> $GITHUB_ENV
+            new_version_sha256_amd64=$(sha256sum mixin_desktop_linux_amd64_portable.tar.gz | cut -d' ' -f1)
+            echo "new_version_sha256_amd64=$new_version_sha256_amd64" >> $GITHUB_ENV
+            
+            # Download and calculate SHA256 for ARM64
+            wget https://github.com/MixinNetwork/flutter-app/releases/download/${{ steps.fetch_release.outputs.tag_name }}/mixin_desktop_linux_arm64_portable.tar.gz -O mixin_desktop_linux_arm64_portable.tar.gz
+            new_version_sha256_arm64=$(sha256sum mixin_desktop_linux_arm64_portable.tar.gz | cut -d' ' -f1)
+            echo "new_version_sha256_arm64=$new_version_sha256_arm64" >> $GITHUB_ENV
           else
             echo "no new version available"
             exit 0
@@ -48,8 +54,18 @@ jobs:
       - name: Update version
         if: env.new_version
         run: |
+          # Update version tag in URLs
           sed -i -e 's/${{ env.current_version }}/${{ env.new_version }}/g' one.mixin.messenger.yml
-          sed -i -e 's/sha256:.*/sha256: ${{ env.new_version_sha256 }}/g' one.mixin.messenger.yml
+          
+          # Update AMD64 SHA256
+          current_sha256_amd64=$(grep -A 2 "mixin_desktop_linux_amd64_portable.tar.gz" one.mixin.messenger.yml | grep "sha256:" | sed 's/.*sha256: //')
+          sed -i "s/$current_sha256_amd64/${{ env.new_version_sha256_amd64 }}/g" one.mixin.messenger.yml
+          
+          # Update ARM64 SHA256
+          current_sha256_arm64=$(grep -A 2 "mixin_desktop_linux_arm64_portable.tar.gz" one.mixin.messenger.yml | grep "sha256:" | sed 's/.*sha256: //')
+          sed -i "s/$current_sha256_arm64/${{ env.new_version_sha256_arm64 }}/g" one.mixin.messenger.yml
+          
+          # Update metainfo.xml
           CURRENT_DATE=$(date '+%Y-%-m-%-d')
           VERSION=$(echo ${{ env.new_version }} | cut -d 'v' -f2)
           sed -i "/<releases>/a\        <release version=\"${VERSION}\" date=\"$CURRENT_DATE\" />" one.mixin.messenger.metainfo.xml
