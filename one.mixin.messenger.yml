@@ -33,14 +33,14 @@ modules:
         path: mixin_desktop.png
       - type: archive
         archive-type: tar
-        url: https://github.com/MixinNetwork/flutter-app/releases/download/v3.7.1/mixin_desktop_linux_amd64_portable.tar.gz
-        sha256: cfc103f8619f4fa6674ed1708a06ccc3c59dd61e2c17aac5624b0947f90de717
+        url: https://github.com/MixinNetwork/flutter-app/releases/download/v3.8.1/mixin_desktop_linux_amd64_portable.tar.gz
+        sha256: 03d5e93053cb4f05c8d1fa16e4f8e98fe4027467ae8b695e7d62bb7484d7d560
         only-arches:
           - x86_64
       - type: archive
         archive-type: tar
-        url: https://github.com/MixinNetwork/flutter-app/releases/download/v3.7.1/mixin_desktop_linux_arm64_portable.tar.gz
-        sha256: b708be61e5bde297f7d60a1ba86b2699dfce2afdee317a6df07ffcb647cc1aad
+        url: https://github.com/MixinNetwork/flutter-app/releases/download/v3.8.1/mixin_desktop_linux_arm64_portable.tar.gz
+        sha256: f746094a8de51f7dd3a6926ef7aa99ad771f88dd660fdcfb311e6a4526be0069
         only-arches:
           - aarch64
       - type: file
