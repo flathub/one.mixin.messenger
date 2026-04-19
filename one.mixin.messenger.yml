@@ -1,6 +1,6 @@
 id: one.mixin.messenger
 runtime: org.gnome.Platform
-runtime-version: '48'
+runtime-version: '50'
 sdk: org.gnome.Sdk
 command: mixin_desktop
 finish-args:
