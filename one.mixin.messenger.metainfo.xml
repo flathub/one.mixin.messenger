@@ -7,8 +7,13 @@
     <id>one.mixin.messenger</id>
     <name>Mixin Messenger</name>
     <summary>Mixin Messenger</summary>
-    <developer_name>Mixin Team</developer_name>
-    <url type="homepage">https://mixin.one/mm</url>
+    <developer id="one.mixin">
+      <name>Mixin Team</name>
+    </developer>
+    <url type="homepage">https://messenger.mixin.one</url>
+    <url type="bugtracker">https://github.com/MixinNetwork/flutter-app/issues</url>
+    <url type="vcs-browser">https://github.com/MixinNetwork/flutter-app</url>
+    <url type="help">https://support.mixin.one</url>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>GPL-3.0</project_license>
     <supports>
@@ -35,7 +40,7 @@
         </screenshot>
         <screenshot>
             <image>https://raw.githubusercontent.com/MixinNetwork/flutter-app/main/dist/screenshots/linux_4.png</image>
-            <caption>Support sytem dark mode.</caption>        
+            <caption>Support sytem dark mode.</caption>
         </screenshot>
     </screenshots>
     <content_rating type="oars-1.1" />
