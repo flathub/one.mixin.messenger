@@ -35,12 +35,24 @@ modules:
         archive-type: tar
         url: https://github.com/MixinNetwork/flutter-app/releases/download/v3.8.1/mixin_desktop_linux_amd64_portable.tar.gz
         sha256: 03d5e93053cb4f05c8d1fa16e4f8e98fe4027467ae8b695e7d62bb7484d7d560
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/MixinNetwork/flutter-app/releases/latest
+          version-query: .tag_name | sub("^v"; "")
+          url-query: .assets[] | select(.name == "mixin_desktop_linux_amd64_portable.tar.gz") | .browser_download_url
+          release-url-template: https://github.com/MixinNetwork/flutter-app/releases/tag/v$version
+          is-main-source: true
         only-arches:
           - x86_64
       - type: archive
         archive-type: tar
         url: https://github.com/MixinNetwork/flutter-app/releases/download/v3.8.1/mixin_desktop_linux_arm64_portable.tar.gz
         sha256: f746094a8de51f7dd3a6926ef7aa99ad771f88dd660fdcfb311e6a4526be0069
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/MixinNetwork/flutter-app/releases/latest
+          version-query: .tag_name | sub("^v"; "")
+          url-query: .assets[] | select(.name == "mixin_desktop_linux_arm64_portable.tar.gz") | .browser_download_url
         only-arches:
           - aarch64
       - type: file
