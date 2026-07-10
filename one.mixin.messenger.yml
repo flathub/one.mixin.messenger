@@ -33,8 +33,8 @@ modules:
         path: mixin_desktop.png
       - type: archive
         archive-type: tar
-        url: https://github.com/MixinNetwork/flutter-app/releases/download/v5.1.1/mixin_desktop_linux_amd64_portable.tar.gz
-        sha256: 81303b28cf400ba9f6ddca1a42d098eea07db949fba781f753a752524851a464
+        url: https://github.com/MixinNetwork/flutter-app/releases/download/v5.1.2/mixin_desktop_linux_amd64_portable.tar.gz
+        sha256: b67b3100c72c8a4a3ce97f00ebcc3297c4dd3eccc55efaafee2d04adb49816dc
         x-checker-data:
           type: json
           url: https://api.github.com/repos/MixinNetwork/flutter-app/releases/latest
@@ -47,8 +47,8 @@ modules:
           - x86_64
       - type: archive
         archive-type: tar
-        url: https://github.com/MixinNetwork/flutter-app/releases/download/v5.1.1/mixin_desktop_linux_arm64_portable.tar.gz
-        sha256: 24be5fa637ae9da01f3bc44fb102d51a4e82b28271facb8384a591a12343775b
+        url: https://github.com/MixinNetwork/flutter-app/releases/download/v5.1.2/mixin_desktop_linux_arm64_portable.tar.gz
+        sha256: cda8e3fc55f97aae3ca7f4a212534a73c7739fbded689331cab928659e3f37bb
         x-checker-data:
           type: json
           url: https://api.github.com/repos/MixinNetwork/flutter-app/releases/latest
