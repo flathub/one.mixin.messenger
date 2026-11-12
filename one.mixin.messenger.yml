@@ -47,8 +47,8 @@ modules:
           - x86_64
       - type: archive
         archive-type: tar
-        url: https://github.com/MixinNetwork/flutter-app/releases/download/v6.5.1/mixin_desktop_linux_arm64_portable.tar.gz
-        sha256: b7e56541921eace82bd3313d462b8c4fddf4842424de7be3a6bbbd4f8255e97a
+        url: https://github.com/MixinNetwork/flutter-app/releases/download/v6.6.1/mixin_desktop_linux_arm64_portable.tar.gz
+        sha256: 3d16df0d6e93c33a41d35a086acfcd2ef069bc09e76e24d350d3236bc801cf73
         x-checker-data:
           type: json
           url: https://api.github.com/repos/MixinNetwork/flutter-app/releases/latest
