@@ -45,6 +45,10 @@
     </screenshots>
     <content_rating type="oars-1.1"/>
     <releases>
+        <release version="7.1.0" date="2026-11-20">
+            <url type="details">https://github.com/MixinNetwork/flutter-app/releases/tag/v7.1.0</url>
+            <description></description>
+        </release>
         <release version="7.0.0" date="2026-11-17">
             <url type="details">https://github.com/MixinNetwork/flutter-app/releases/tag/v7.0.0</url>
             <description></description>
